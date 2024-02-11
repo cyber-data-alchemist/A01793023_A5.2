@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# pylint: disable=invalid-name
 """
 This module calls a ProductList.json and a Sales.Json to compute sales.
 """
@@ -67,17 +68,17 @@ class ComputeSales:
         """
         self.__validate_file_exists__(self.file_path_catalogue)
         try:
-            with open(self.file_path_catalogue, 'r') as file:
+            with open(self.file_path_catalogue, 'r', encoding='utf-8') as file:
                 self.catalogue_data = json.load(file)
-        except json.JSONDecodeError as e:
-            self.data_errors.append(f"Catalogue file format error: {e}")
+        except json.JSONDecodeError as err_read:
+            self.data_errors.append(f"Catalogue file format error: {err_read}")
 
         self.__validate_file_exists__(self.file_path_sales)
         try:
-            with open(self.file_path_sales, 'r') as file:
+            with open(self.file_path_sales, 'r', encoding='utf-8') as file:
                 self.sales_data = json.load(file)
-        except json.JSONDecodeError as e:
-            self.data_errors.append(f"Sales file format error: {e}")
+        except json.JSONDecodeError as err_read:
+            self.data_errors.append(f"Sales file format error: {err_read}")
 
         self.__validate_catalogue_file__()
         self.__validate_sales_file__()
@@ -193,7 +194,8 @@ class ComputeSales:
         if not self.computed_sales:
             self.compute_sales()
 
-        with open('SalesResults.csv', 'w', newline='') as csvfile:
+        with open('SalesResults.csv', 'w',
+                  newline='', encoding='utf-8') as csvfile:
             fieldnames = ['Product', 'Total Sales']
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
@@ -224,10 +226,10 @@ if __name__ == "__main__":
 
     # Review if program was initiated properly.
     if len(sys.argv) != 3:
-        file_1 = "priceCatalogue.json"
-        file_2 = "salesRecord.json"
-        msg = "Usage: python computeSales.py {}  {}".format(file_1, file_2)
-        print(msg)
+        FILE_1 = "priceCatalogue.json"
+        FILE_2 = "salesRecord.json"
+        MSG = f"Usage: python computeSales.py {FILE_1}  {FILE_2}"
+        print(MSG)
         sys.exit(1)
 
     # Time start
